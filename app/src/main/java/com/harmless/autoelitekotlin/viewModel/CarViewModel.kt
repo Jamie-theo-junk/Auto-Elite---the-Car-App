@@ -14,8 +14,7 @@ const val TAG = "CarViewModel"
 
 class CarViewModel {
 
-    var carList = mutableListOf<Car>()
-    var selectedCars = mutableListOf<Car>()
+    private val carList = mutableListOf<Car>()
 
     interface CarsCallback {
         fun onDataLoaded(cars: List<Car>)
@@ -24,135 +23,19 @@ class CarViewModel {
 
     fun setCars(callback: CarsCallback) {
         val carsReference = FirebaseDatabase.getInstance().getReference("cars")
-        val carListener = object : ValueEventListener {
+
+        carsReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 carList.clear()
                 for (carSnapshot in snapshot.children) {
                     val car = carSnapshot.getValue(Car::class.java)
-                    if (car != null) {
-                        if (car.mileage == null) {
-                            car.mileage = 0
-                        }
-                        carList.add(car)
+                    car?.let {
+                        // Default mileage to 0 if null
+                        if (it.mileage == null) it.mileage = 0
+                        carList.add(it)
                     }
                 }
-
                 callback.onDataLoaded(carList)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                callback.onCancelled(error)
-            }
-        }
-
-        carsReference.addValueEventListener(carListener)
-    }
-
-    fun minMileage(selectedMileage:String):Int?{
-        val constants = Constants()
-        when(selectedMileage){
-            constants.mileage[0]->{
-                return null
-            }
-            constants.mileage[1]->{
-                return 200000
-            }
-            constants.mileage[2]->{
-                return 150000
-            }
-            constants.mileage[3]->{
-                return 100000
-            }
-            constants.mileage[4]->{
-                return 50000
-            }
-            constants.mileage[5]->{
-                return 10000
-            }
-            constants.mileage[6]->{
-                return 0
-            }
-            else->{
-                return null
-            }
-        }
-    }
-
-    fun maxMileage(selectedMileage:String): Int? {
-        val constants = Constants()
-        when(selectedMileage){
-            constants.mileage[0]->{
-                return null
-            }
-            constants.mileage[1]->{
-                return 1000000
-            }
-            constants.mileage[2]->{
-                return 199999
-            }
-            constants.mileage[3]->{
-                return 149999
-            }
-            constants.mileage[4]->{
-                return 99999
-            }
-            constants.mileage[5]->{
-                return 49999
-            }
-            constants.mileage[6]->{
-                return 9999
-            }
-            else->{
-                return null
-            }
-        }
-    }
-
-    fun setSelectedCars(
-        carsSelected: MutableList<CarBrand>,
-        yearSelected: MutableList<Int>,
-        colorSelected: MutableList<String>,
-        driveTrainSelected: String?,
-        locationSelected: MutableList<String>,
-        minMileageSelected: Int? = null,
-        maxMileageSelected: Int? = null,
-        priceSelected: MutableList<Double>,
-        transmissionSelected: String?,
-        callback: CarsCallback
-    ) {
-        setCars(object : CarsCallback {
-            override fun onDataLoaded(cars: List<Car>) {
-                selectedCars.clear()
-                sortPrice()
-                sortYear()
-
-                for (car in cars) {
-                    val brandCondition = carsSelected.isEmpty() || carsSelected.any { it.brand == car.brand }
-                    val modelCondition = carsSelected.isEmpty() || carsSelected.any { carBrand -> carBrand.models.any { it.name == car.model } }
-                    val colorCondition = colorSelected.isEmpty() || colorSelected.contains(car.color)
-                    val typeCondition = driveTrainSelected == null || driveTrainSelected == "Type" || car.type == driveTrainSelected
-                    val locationCondition = locationSelected.isEmpty() || locationSelected.contains(car.location)
-                    val mileageCondition = (minMileageSelected == null || maxMileageSelected == null) ||
-                            (car.mileage in (minMileageSelected!!..maxMileageSelected!!))
-                    val priceCondition = priceSelected.isEmpty() || (car.price in priceSelected.minOrNull()!!..priceSelected.maxOrNull()!!)
-                    val transmissionCondition = transmissionSelected == null || car.transmission == transmissionSelected
-                    val yearCondition = yearSelected.isEmpty() || car.year in (yearSelected.minOrNull()!!..yearSelected.maxOrNull()!!)
-
-                    if (brandCondition &&
-                        modelCondition &&
-                        colorCondition &&
-                        typeCondition &&
-                        locationCondition &&
-                        mileageCondition &&
-                        priceCondition &&
-                        transmissionCondition &&
-                        yearCondition
-                    ) {
-                        selectedCars.add(car)
-                    }
-                }
-
-                callback.onDataLoaded(selectedCars)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -160,40 +43,148 @@ class CarViewModel {
             }
         })
     }
-
-
-    private fun sortPrice(){
-       val list = SelectedValues.selectedPrice
-
-        val n = list.size
-        for (i in 0 until n - 1) {
-            for (j in 0 until n - i - 1) {
-                if (list[j] > list[j + 1]) {
-
-                    val temp = list[j]
-                    list[j] = list[j + 1]
-                    list[j + 1] = temp
-                }
-            }
+//        fun filterCars(allCars: List<Car>): List<Car> {
+//        // If nothing selected, return all cars
+//        if (SelectedValues.carBrandsSelected.isEmpty() && SelectedValues.carModelsSelected.isEmpty() && SelectedValues.carVariantsSelected.isEmpty()) {
+//            return allCars
+//        }
+//
+//        return allCars.filter { car ->
+//            val brandMatch = SelectedValues.carBrandsSelected.contains(car.brand)
+//            val modelMatch = SelectedValues.carModelsSelected.contains(Pair(car.brand, car.model))
+//            val variantMatch = SelectedValues.carVariantsSelected.contains(Triple(car.brand, car.model, car.variant))
+//
+//            brandMatch || modelMatch || variantMatch
+//        }
+//    }
+    fun minMileage(selectedMileage: String): Int {
+        val constants = Constants()
+        return when (selectedMileage) {
+            constants.mileage[1] -> 0
+            constants.mileage[2] -> 10_000
+            constants.mileage[3] -> 50_000
+            constants.mileage[4] -> 100_000
+            constants.mileage[5] -> 150_000
+            constants.mileage[6] -> 200_000
+            else -> Int.MIN_VALUE
         }
-        SelectedValues.selectedPrice = list
-    }
-    private fun sortYear(){
-        val list = SelectedValues.selectedYear
-
-        val n = list.size
-        for (i in 0 until n - 1) {
-            for (j in 0 until n - i - 1) {
-                if (list[j] > list[j + 1]) {
-
-                    val temp = list[j]
-                    list[j] = list[j + 1]
-                    list[j + 1] = temp
-                }
-            }
-        }
-        SelectedValues.selectedYear = list
     }
 
+    fun maxMileage(selectedMileage: String): Int {
+        val constants = Constants()
+        return when (selectedMileage) {
+            constants.mileage[1] -> 9_999
+            constants.mileage[2] -> 49_999
+            constants.mileage[3] -> 99_999
+            constants.mileage[4] -> 149_999
+            constants.mileage[5] -> 199_999
+            constants.mileage[6] -> 10_000_000
+            else -> Int.MAX_VALUE
+        }
+    }
+    fun setSelectedCars(
+        yearSelected: List<Int>,
+        colorSelected: List<String>,
+        driveTrainSelected: String?,
+        locationSelected: List<String>,
+        minMileageSelected: Int? = null,
+        maxMileageSelected: Int? = null,
+        minPriceSelected: Int? = null,
+        maxPriceSelected: Int? = null,
+        transmissionSelected: String?,
+        callback: (List<Car>) -> Unit
+    ) {
+        setCars(object : CarsCallback {
+            override fun onDataLoaded(cars: List<Car>) {
 
+                val selBrands = SelectedValues.carBrandsSelected
+                val selModels = SelectedValues.carModelsSelected
+                val selVariants = SelectedValues.carVariantsSelected
+
+                val filtered = cars.filter { car ->
+
+                    // --- Brand filtering ---
+                    val brandMatch =
+                        if (selBrands.isEmpty()) true
+                        else selBrands.contains(car.brand)
+
+                    // --- Model filtering ---
+                    val modelMatch =
+                        if (selModels.isEmpty()) true
+                        else selModels.contains(Pair(car.brand, car.model))
+
+                    // --- Variant filtering ---
+                    val variantMatch =
+                        if (selVariants.isEmpty()) true
+                        else selVariants.contains(Triple(car.brand, car.model, car.variant))
+
+                    // Only accept cars that match ALL non-empty lists
+                    val categoryMatches = brandMatch && modelMatch && variantMatch
+
+
+                    // --- Color filtering ---
+                    val colorMatches =
+                        if (colorSelected.isEmpty()) true
+                        else colorSelected.contains(car.color)
+
+                    // --- Type ---
+                    val typeMatches =
+                        if (driveTrainSelected.isNullOrEmpty() || driveTrainSelected == "Type") true
+                        else car.wheelDrive == driveTrainSelected
+
+                    // --- Location ---
+                    val locationMatches =
+                        if (locationSelected.isEmpty()) true
+                        else locationSelected.contains(car.location)
+
+                    // --- Mileage ---
+                    val mileage = car.mileage ?: 0
+                    val mileageMatches =
+                        (minMileageSelected ?: Int.MIN_VALUE) <= mileage &&
+                                (maxMileageSelected ?: Int.MAX_VALUE) >= mileage
+
+                    // --- Price ---
+                    val price = car.price ?: 0.0
+                    val priceMatches =
+                        (minPriceSelected?.toDouble() ?: Double.NEGATIVE_INFINITY) <= price &&
+                                (maxPriceSelected?.toDouble() ?: Double.POSITIVE_INFINITY) >= price
+
+                    // --- Transmission ---
+                    val transmissionMatches =
+                        if (transmissionSelected.isNullOrEmpty()) true
+                        else car.transmission == transmissionSelected
+
+                    // --- Year ---
+                    val yearMatches =
+                        if (yearSelected.isEmpty()) true
+                                else yearSelected.contains(car.year)
+
+
+                    categoryMatches &&
+                            colorMatches &&
+                            typeMatches &&
+                            locationMatches &&
+                            mileageMatches &&
+                            priceMatches &&
+                            transmissionMatches &&
+                            yearMatches
+                }.sortedByDescending { it.year }
+
+                callback(filtered)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(emptyList())
+            }
+        })
+    }
+
+
+
+
+
+
+    private fun sortYear() {
+        SelectedValues.selectedYear.sort()
+    }
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     tools:context=".view.activities.FilterActivities.YearSelection">
 
     <RelativeLayout
@@ -46,6 +47,7 @@
         android:layout_alignParentBottom="true"
         >
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/backBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -58,6 +60,7 @@
             android:background="@drawable/back_button"
             />
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/applyBtn"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:textSize="20sp"

@@ -9,10 +9,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:fontFamily="@font/sora_font_family"
-        android:textColor="@color/spinner_color"
+        android:textSize="14sp"
+        android:fontFamily="@font/sora_semi_bold"
+        android:textColor="@color/black"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxLines="1"
         />
 
 </RelativeLayout>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.ShowMore">
+    tools:context=".view.activities.ShowMore"
+    >
 
 
     <androidx.core.widget.NestedScrollView
@@ -33,11 +34,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:fontFamily="@font/sora_font_family"
                     android:text="Car Brand"
-                    android:textColor="@color/spinner_color"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/sora_semi_bold"
+                    />
 
             </RelativeLayout>
 
@@ -78,11 +79,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:fontFamily="@font/sora_font_family"
                     android:text="Year"
-                    android:textColor="@color/spinner_color"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/sora_semi_bold"
+                   />
 
             </RelativeLayout>
 
@@ -113,11 +114,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:fontFamily="@font/sora_font_family"
                     android:text="Price"
-                    android:textColor="@color/spinner_color"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/sora_semi_bold"
+                  />
 
             </RelativeLayout>
 
@@ -150,11 +151,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:fontFamily="@font/sora_font_family"
                     android:text="Province"
-                    android:textColor="@color/spinner_color"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/sora_semi_bold"
+               />
 
             </RelativeLayout>
 
@@ -187,11 +188,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:fontFamily="@font/sora_font_family"
                     android:text="Colour"
-                    android:textColor="@color/spinner_color"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/sora_semi_bold"
+      />
 
             </RelativeLayout>
 

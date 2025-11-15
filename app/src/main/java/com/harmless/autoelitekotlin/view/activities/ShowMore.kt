@@ -7,8 +7,12 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Spinner
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.harmless.autoelitekotlin.R
+import com.harmless.autoelitekotlin.databinding.ActivityShowMoreBinding
 import com.harmless.autoelitekotlin.model.utils.Constants
 import com.harmless.autoelitekotlin.view.activities.FilterActivities.ColorSelection
 import com.harmless.autoelitekotlin.view.activities.FilterActivities.MakeAndModel
@@ -19,12 +23,22 @@ import com.harmless.autoelitekotlin.view.adapters.SpinnerAdapter
 import com.harmless.autoelitekotlin.viewModel.CarViewModel
 
 class ShowMore : AppCompatActivity() {
-
+private lateinit var binding: ActivityShowMoreBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        binding = ActivityShowMoreBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_show_more)
         init()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
     }
+
+
+
 
     private fun init(){
         //init the spinner values
@@ -89,7 +103,8 @@ class ShowMore : AppCompatActivity() {
         newOrUsedSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = typeAdapter.getItem(position)
-                SelectedValues.isNewOrUsed = selectedItem!!
+                SelectedValues.isNewOrUsed = selectedItem
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -102,7 +117,7 @@ class ShowMore : AppCompatActivity() {
         carTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = typeAdapter.getItem(position)
-                SelectedValues.selectedType = selectedItem!!
+                SelectedValues.selectedDriveTrain = selectedItem!!
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

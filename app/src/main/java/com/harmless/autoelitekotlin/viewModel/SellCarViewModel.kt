@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener
 import com.harmless.autoelitekotlin.model.Car
 import com.harmless.autoelitekotlin.model.CarBrand
 import com.harmless.autoelitekotlin.model.CarModel
+import com.harmless.autoelitekotlin.model.CarVariant
 import com.harmless.autoelitekotlin.model.User
 
 class SellCarViewModel : ViewModel() {
@@ -64,7 +65,9 @@ class SellCarViewModel : ViewModel() {
 
     fun getCarModels(carBrand: CarBrand): List<CarModel> = carBrand.models
 
-    fun getCarVariants(carModel: CarModel): List<String> = carModel.variants
+    fun getCarVariants(carModel: CarModel): List<String> {
+        return carModel.variants.map { it.name }
+    }
 
     // ----------------- Update Pages -----------------
     fun updateFirstPage(

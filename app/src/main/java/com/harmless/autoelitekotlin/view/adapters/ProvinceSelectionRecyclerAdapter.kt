@@ -40,9 +40,7 @@ class ProvinceSelectionRecyclerAdapter(private val items: List<String>):
             else{
                 SelectedValues.selectedProvince.remove(items[position])
             }
-            for (items in SelectedValues.selectedPrice){
-                Log.d(TAG, "onBindViewHolder:  $items")
-            }
+
 
         }
 

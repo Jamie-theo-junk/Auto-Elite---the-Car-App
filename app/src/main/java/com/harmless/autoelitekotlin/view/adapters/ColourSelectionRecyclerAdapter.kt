@@ -41,9 +41,9 @@ class ColourSelectionRecyclerAdapter(private val items: List<String>):
             else{
                 SelectedValues.selectedColor.remove(items[position])
             }
-            for (items in SelectedValues.selectedPrice){
-                Log.d(TAG, "onBindViewHolder:  $items")
-            }
+//            for (items in SelectedValues.selectedPrice){
+//                Log.d(TAG, "onBindViewHolder:  $items")
+//            }
 
         }
 

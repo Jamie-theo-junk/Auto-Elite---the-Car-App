@@ -25,28 +25,29 @@ class YearSelectionRecyclerAdapter(private val items: List<Int>):
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val model = items[position]
+        val year = items[position]
 
-        holder.brandName.text = model.toString()
+        // Prevent triggering listener when recycling
+        holder.checkbox.setOnCheckedChangeListener(null)
+        holder.checkbox.isChecked = SelectedValues.selectedYear.contains(year)
 
+        // Re-attach listener
         holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
-
-            if(isChecked){
-                SelectedValues.selectedYear.add(items[position])
+            if (isChecked) {
+                if (!SelectedValues.selectedYear.contains(year)) {
+                    SelectedValues.selectedYear.add(year)
+                }
+            } else {
+                SelectedValues.selectedYear.remove(year)
             }
-            else{
-                SelectedValues.selectedYear.remove(items[position])
-            }
-
         }
 
 
-
-
+        holder.yearText.text = year.toString()
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val brandName = itemView.findViewById<TextView>(R.id.nameTxt)
+        val yearText = itemView.findViewById<TextView>(R.id.nameTxt)
         val checkbox = itemView.findViewById<CheckBox>(R.id.checkbox)
 
     }
