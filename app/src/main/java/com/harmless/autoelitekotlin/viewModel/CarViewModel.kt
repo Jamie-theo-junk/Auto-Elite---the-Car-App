@@ -158,6 +158,7 @@ class CarViewModel {
                     val yearMatches =
                         if (yearSelected.isEmpty()) true
                                 else yearSelected.contains(car.year)
+                    Log.d(TAG, "onDataLoaded: Year: $yearSelected")
 
 
                     categoryMatches &&

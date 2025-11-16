@@ -2,11 +2,13 @@ package com.harmless.autoelitekotlin.view.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,12 +25,16 @@ import com.harmless.autoelitekotlin.view.adapters.SpinnerAdapter
 import com.harmless.autoelitekotlin.viewModel.CarViewModel
 
 class ShowMore : AppCompatActivity() {
+
+
 private lateinit var binding: ActivityShowMoreBinding
+    private val TAG = "ShowMore"
+private var viewModel = CarViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityShowMoreBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_show_more)
+        setContentView(binding.root)
         init()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -37,15 +43,14 @@ private lateinit var binding: ActivityShowMoreBinding
         }
     }
 
-
-
-
     private fun init(){
         //init the spinner values
         val carTypeSpinner = findViewById<Spinner>(R.id.TypeBtn)
         val newOrUsedSpinner = findViewById<Spinner>(R.id.NewOrUsedBtn)
         val mileageSpinner = findViewById<Spinner>(R.id.MileageBtn)
         val fuelTypeSpinner = findViewById<Spinner>(R.id.FuelTypeBtn)
+        val maxPriceSpinner = binding.maxPriceSpinner
+        val minPriceSpinner = binding.minPriceSpinner
 
         //init the buttons
         val apply = findViewById<Button>(R.id.applyBtn)
@@ -54,76 +59,71 @@ private lateinit var binding: ActivityShowMoreBinding
         //init the relative values
         val carBrandRel = findViewById<RelativeLayout>(R.id.carBrandBtn)
         val yearRel = findViewById<RelativeLayout>(R.id.YearBtn)
-        val priceRel = findViewById<RelativeLayout>(R.id.PriceBtn)
         val provinceRel = findViewById<RelativeLayout>(R.id.LocationBtn)
         val colourRel = findViewById<RelativeLayout>(R.id.ColourBtn)
 
         val constant = Constants()
 
-        val typeAdapter = SpinnerAdapter(applicationContext, constant.driveTrain)
-        val newUsedAdapter = SpinnerAdapter(applicationContext, constant.newOrUsed)
-        val mileageAdapter = SpinnerAdapter(applicationContext, constant.mileage)
-        val fuelTypeAdapter = SpinnerAdapter(applicationContext, constant.fuelType)
+        //for fuel spinner
+        val fuel = SelectedValues.selectedFuelType
+        setupSpinner(fuelTypeSpinner, constant.fuelType, fuel) { selected ->
+            SelectedValues.selectedFuelType = selected
 
-        carTypeSpinner.adapter = typeAdapter
-        newOrUsedSpinner.adapter = newUsedAdapter
-        mileageSpinner.adapter = mileageAdapter
-        fuelTypeSpinner.adapter = fuelTypeAdapter
-
-
-        fuelTypeSpinner.setSelection(0)
-        fuelTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = typeAdapter.getItem(position)
-                SelectedValues.selectedFuelType = selectedItem!!
+        }
+        //for mileage spinner
+        val mileage = SelectedValues.selectedMileage
+        setupSpinner(mileageSpinner, constant.mileage, mileage) { selected ->
+            SelectedValues.selectedMileage = selected
+            if (selected.contains("more", true) || selected.contains("400")) {
+                SelectedValues.selectedMinMileage = parseMileageStringToInt(selected) ?: 0
+                SelectedValues.selectedMaxMileage = 10_000_000
+            } else {
+                SelectedValues.selectedMinMileage = viewModel.minMileage(selected)
+                SelectedValues.selectedMaxMileage = viewModel.maxMileage(selected)
             }
+        }
+        //for New Used spinner
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+        val newUsed = SelectedValues.isNewOrUsed
+        setupSpinner(newOrUsedSpinner, constant.newOrUsed, newUsed) { selected ->
+            SelectedValues.isNewOrUsed = selected
 
+        }
+
+        val type = SelectedValues.selectedDriveTrain
+        setupSpinner(carTypeSpinner, constant.driveTrain, type) { selected ->
+            SelectedValues.selectedDriveTrain = selected
+
+        }
+
+        val minPrice = SelectedValues.selectedMinPrice
+        setupSpinner(minPriceSpinner, constant.minPrices, minPrice) { selectedStr ->
+            SelectedValues.selectedMinPrice = selectedStr
+            val minInt = parsePriceStringToInt(selectedStr)
+            val maxInt = parsePriceStringToInt(SelectedValues.selectedMaxPrice)
+            if (minInt != null && maxInt != null && minInt > maxInt) {
+                SelectedValues.selectedMaxPrice = selectedStr
+                val idx = constant.maxPrices.indexOf(selectedStr)
+                if (idx >= 0) maxPriceSpinner.setSelection(idx)
+                Toast.makeText(this, "Max price adjusted to match selected min price.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val maxPrice = SelectedValues.selectedMaxPrice
+        // --- Max price spinner ---
+        setupSpinner(maxPriceSpinner, constant.maxPrices, maxPrice) { selectedStr ->
+            SelectedValues.selectedMaxPrice = selectedStr
+            val maxInt = parsePriceStringToInt(selectedStr)
+            val minInt = parsePriceStringToInt(SelectedValues.selectedMinPrice)
+            if (minInt != null && maxInt != null && maxInt < minInt) {
+                SelectedValues.selectedMinPrice = selectedStr
+                val idx = constant.minPrices.indexOf(selectedStr)
+                if (idx >= 0) minPriceSpinner.setSelection(idx)
+                Toast.makeText(this, "Min price adjusted to not exceed max price.", Toast.LENGTH_SHORT).show()
             }
         }
 
 
-        mileageSpinner.setSelection(0)
-        mileageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = typeAdapter.getItem(position)
-                val viewModel = CarViewModel()
-                SelectedValues.selectedMaxMileage = viewModel.maxMileage(selectedItem!!)
-                SelectedValues.selectedMinMileage = viewModel.minMileage(selectedItem!!)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-        }
-
-
-        newOrUsedSpinner.setSelection(0)
-        newOrUsedSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = typeAdapter.getItem(position)
-                SelectedValues.isNewOrUsed = selectedItem
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-        }
-
-
-        carTypeSpinner.setSelection(0)
-        carTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = typeAdapter.getItem(position)
-                SelectedValues.selectedDriveTrain = selectedItem!!
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-        }
 
         carBrandRel.setOnClickListener{
             val toCarBrand = Intent(applicationContext,  MakeAndModel::class.java)
@@ -137,10 +137,6 @@ private lateinit var binding: ActivityShowMoreBinding
             val toProvince = Intent(applicationContext, ProvinceSelection::class.java)
             startActivity(toProvince)
         }
-        priceRel.setOnClickListener{
-            val toPrice = Intent(applicationContext, PriceSelection::class.java)
-            startActivity(toPrice)
-        }
         colourRel.setOnClickListener{
             val toColor = Intent(applicationContext, ColorSelection::class.java)
             startActivity(toColor)
@@ -153,5 +149,27 @@ private lateinit var binding: ActivityShowMoreBinding
             finish()
         }
 
+    }
+    private fun setupSpinner(spinner: Spinner, items: List<String>, selectedItem: String?, onSelect: (String) -> Unit) {
+        val adapter = SpinnerAdapter(this, items)
+        spinner.adapter = adapter
+        selectedItem?.let {
+            val idx = items.indexOf(it)
+            if (idx >= 0) spinner.setSelection(idx)
+        }
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                onSelect(items[position])
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun parsePriceStringToInt(priceStr: String?): Int? {
+        return priceStr?.replace(Regex("[^0-9]"), "")?.takeIf { it.isNotEmpty() }?.toInt()
+    }
+
+    private fun parseMileageStringToInt(mileageStr: String?): Int? {
+        return mileageStr?.replace(Regex("[^0-9]"), "")?.takeIf { it.isNotEmpty() }?.toInt()
     }
 }

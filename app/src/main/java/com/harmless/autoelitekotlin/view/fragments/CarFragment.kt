@@ -1,5 +1,6 @@
 package com.harmless.autoelitekotlin.view.fragments
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,12 @@ class CarFragment : Fragment(), CarViewModel.CarsCallback {
 
     private val viewModel = CarViewModel()
     private lateinit var carBrandTxt: TextView
+    private lateinit var mileageStr: String
+
+    private lateinit var mileageSpinner:Spinner
+    private lateinit var minPriceSpinner:Spinner
+    private lateinit var maxPriceSpinner:Spinner
+    private lateinit var typeSpinner :Spinner
 
     private fun parsePriceStringToInt(priceStr: String?): Int? {
         return priceStr?.replace(Regex("[^0-9]"), "")?.takeIf { it.isNotEmpty() }?.toInt()
@@ -52,13 +59,14 @@ class CarFragment : Fragment(), CarViewModel.CarsCallback {
 
     private fun init(view: View) {
         val carBrandBtn = view.findViewById<ConstraintLayout>(R.id.carBrandBtn)
-        val mileageSpinner = view.findViewById<Spinner>(R.id.mileageBrandSpinner)
-        val minPriceSpinner = view.findViewById<Spinner>(R.id.minPriceSpinner)
-        val maxPriceSpinner = view.findViewById<Spinner>(R.id.maxPriceSpinner)
-        val typeSpinner = view.findViewById<Spinner>(R.id.typeBrandSpinner)
+         mileageSpinner = view.findViewById<Spinner>(R.id.mileageBrandSpinner)
+         minPriceSpinner = view.findViewById<Spinner>(R.id.minPriceSpinner)
+         maxPriceSpinner = view.findViewById<Spinner>(R.id.maxPriceSpinner)
+         typeSpinner = view.findViewById<Spinner>(R.id.typeBrandSpinner)
         val yearRelative = view.findViewById<RelativeLayout>(R.id.yearBrandSpinner)
         val searchBtn = view.findViewById<Button>(R.id.SearchBtn)
         val showMoreTxt = view.findViewById<TextView>(R.id.showMoreId)
+        val resetBtn = view.findViewById<TextView>(R.id.resetId)
         carBrandTxt = view.findViewById(R.id.CarBrandTxt)
 
         val constants = Constants()
@@ -72,7 +80,7 @@ class CarFragment : Fragment(), CarViewModel.CarsCallback {
         setupSpinner(typeSpinner, constants.driveTrain, SelectedValues.selectedDriveTrain) { selected ->
             SelectedValues.selectedDriveTrain = selected
         }
-
+//        mileageStr = SelectedValues.selectedMileage ?: constants.mileage.first()
         // --- Mileage spinner ---
         setupSpinner(mileageSpinner, constants.mileage, SelectedValues.selectedMileage) { selected ->
             SelectedValues.selectedMileage = selected
@@ -111,9 +119,26 @@ class CarFragment : Fragment(), CarViewModel.CarsCallback {
             }
         }
 
+        resetBtn.setOnClickListener {
+                // --- Reset SelectedValues ---
+               SelectedValues.clear()
+            SelectedValues.init(requireContext())
+                // --- Reset UI components ---
+                carBrandTxt.text = "Makes & Models"
+
+                // Reset all spinners to first index (position 0)
+                typeSpinner?.setSelection(0)
+                mileageSpinner?.setSelection(0)
+                minPriceSpinner?.setSelection(0)
+                maxPriceSpinner?.setSelection(0)
+
+                Toast.makeText(requireContext(), "Filters reset", Toast.LENGTH_SHORT).show()
+
+        }
+
         // --- Search button ---
         searchBtn.setOnClickListener {
-
+            Log.d(TAG, "init: Year:Selected Year: ${SelectedValues.selectedYear}")
             viewModel.setSelectedCars(
                 SelectedValues.selectedYear,
                 SelectedValues.selectedColor,
@@ -168,17 +193,33 @@ class CarFragment : Fragment(), CarViewModel.CarsCallback {
 
     override fun onResume() {
         super.onResume()
-//        val displayCars = if (SelectedValues.carBrandsSelected.isNotEmpty()) {
-//            SelectedValues.carBrandsSelected.joinToString(" ") {
-//                if (it.models.isNullOrEmpty()) it.brand else "${it.brand}[${it.models.size}]"
-//            }
-//        } else {
-//            "Makes & Models"
-//        }
-//
-//        carBrandTxt.text = displayCars
 
+        // Update car brand text
+        carBrandTxt.text = if (SelectedValues.carBrandsSelected.isNotEmpty()) {
+            SelectedValues.carBrandsSelected.joinToString(", ")
+        } else {
+            "Makes & Models"
+        }
 
+        // Sync spinners
+        typeSpinner?.let {
+            val idx = Constants().driveTrain.indexOf(SelectedValues.selectedDriveTrain)
+            if (idx >= 0) it.setSelection(idx)
+        }
 
+        mileageSpinner?.let {
+            val idx = Constants().mileage.indexOf(SelectedValues.selectedMileage)
+            if (idx >= 0) it.setSelection(idx)
+        }
+
+        minPriceSpinner?.let {
+            val idx = Constants().minPrices.indexOf(SelectedValues.selectedMinPrice)
+            if (idx >= 0) it.setSelection(idx)
+        }
+
+        maxPriceSpinner?.let {
+            val idx = Constants().maxPrices.indexOf(SelectedValues.selectedMaxPrice)
+            if (idx >= 0) it.setSelection(idx)
+        }
     }
 }

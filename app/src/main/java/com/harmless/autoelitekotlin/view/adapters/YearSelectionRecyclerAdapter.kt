@@ -1,5 +1,6 @@
 package com.harmless.autoelitekotlin.view.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,7 @@ import com.harmless.autoelitekotlin.R
 class YearSelectionRecyclerAdapter(private val items: List<Int>):
     RecyclerView.Adapter<YearSelectionRecyclerAdapter.ItemViewHolder>(){
 
-
-
+    private val TAG = "YearSelectionRecyclerAd"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.brand_items_card, parent, false)
@@ -27,21 +27,25 @@ class YearSelectionRecyclerAdapter(private val items: List<Int>):
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val year = items[position]
 
-        // Prevent triggering listener when recycling
         holder.checkbox.setOnCheckedChangeListener(null)
+
         holder.checkbox.isChecked = SelectedValues.selectedYear.contains(year)
 
-        // Re-attach listener
         holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            val list = SelectedValues.selectedYear
+
             if (isChecked) {
-                if (!SelectedValues.selectedYear.contains(year)) {
-                    SelectedValues.selectedYear.add(year)
+                if (!list.contains(year)) {
+                    list.add(year)
+                    SelectedValues.selectedYear = list
+                    Log.d("TAG", "Added year: ${SelectedValues.selectedYear}")
                 }
             } else {
-                SelectedValues.selectedYear.remove(year)
+                list.remove(year)
+                SelectedValues.selectedYear = list
+                Log.d("TAG", "Removed year: ${SelectedValues.selectedYear}")
             }
         }
-
 
         holder.yearText.text = year.toString()
     }

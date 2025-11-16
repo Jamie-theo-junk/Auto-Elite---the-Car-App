@@ -54,7 +54,7 @@ class YearSelection : AppCompatActivity() {
         }
         val applyBtn = binding.applyBtn
         applyBtn.setOnClickListener {
-
+            finish()
         }
     }
 }

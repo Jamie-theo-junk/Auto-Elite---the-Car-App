@@ -170,7 +170,18 @@
             android:layout_height="45dp"/>
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/resetId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:textSize="15sp"
+        android:textColor="@color/car_screen_color"
+        android:layout_below="@id/priceLinearView"
+        android:text="Reset"
+        android:fontFamily="@font/sora_font_family"
+        android:layout_marginStart="35dp"
+        />
 
     <TextView
         android:id="@+id/showMoreId"
