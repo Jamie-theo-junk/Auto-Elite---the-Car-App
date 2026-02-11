@@ -8,9 +8,34 @@ data class CarBrand(
 ) {
     @get:Exclude
     var isExpandable: Boolean = false
+
+    @get:Exclude
+    var isChecked: Boolean = false
+
+    @get:Exclude
+    var isCheckedInitialized: Boolean = false
 }
 
 data class CarModel(
     val name: String = "",
-    val variants: MutableList<String> = mutableListOf()
-)
+    val variants: MutableList<CarVariant> = mutableListOf()
+) {
+    @get:Exclude
+    var isExpandable: Boolean = false
+
+    @get:Exclude
+    var isChecked: Boolean = false
+
+    @get:Exclude
+    var isCheckedInitialized: Boolean = false
+}
+
+data class CarVariant(
+    val name: String = ""
+) {
+    @get:Exclude
+    var isChecked: Boolean = false
+
+    @get:Exclude
+    var isCheckedInitialized: Boolean = false
+}

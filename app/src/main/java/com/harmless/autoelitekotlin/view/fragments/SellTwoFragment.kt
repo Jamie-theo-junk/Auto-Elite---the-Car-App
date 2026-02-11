@@ -31,6 +31,8 @@ class SellTwoFragment : Fragment() {
     private lateinit var newOrUsedSpinner:Spinner
     private lateinit var provinceSpinner:Spinner
 
+    private lateinit var fuelSpinner:Spinner
+
     private lateinit var mileageText: TextView
     private lateinit var priceText: TextView
     private lateinit var descriptionText: TextView
@@ -61,6 +63,7 @@ class SellTwoFragment : Fragment() {
     private fun initViews(){
         newOrUsedSpinner = binding.sellCarNewUsedCardview
         provinceSpinner = binding.sellCarProvinceCardview
+        fuelSpinner = binding.sellCarFuelTypeCardview
 
         mileageText = binding.sellCarMileageCardview
         priceText = binding.sellCarPriceCardview
@@ -104,7 +107,7 @@ class SellTwoFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                SellCarViewModel.SellSession.selectedTransmission = newOrUsedArray[position]
+                SellCarViewModel.SellSession.selectedNewOrUsed = newOrUsedArray[position]
 
             }
 
@@ -138,6 +141,34 @@ class SellTwoFragment : Fragment() {
                 // Optional
             }
         }
+
+        val fuelTypeArray = Constants().fuelType
+
+        val fuelTypeAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            fuelTypeArray
+        )
+        fuelTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        fuelSpinner.adapter = fuelTypeAdapter
+
+        fuelSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                SellCarViewModel.SellSession.selectedFuelType = fuelTypeArray[position]
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Optional
+            }
+        }
+
     }
     private fun navigationButtons(){
         backButton.setOnClickListener {

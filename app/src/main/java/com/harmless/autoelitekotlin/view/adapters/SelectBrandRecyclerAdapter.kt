@@ -1,5 +1,6 @@
 package com.harmless.autoelitekotlin.view.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,9 @@ class SelectBrandRecyclerAdapter(
     private val viewModel: MakeAndModelViewModel
 ) : RecyclerView.Adapter<SelectBrandRecyclerAdapter.BrandViewHolder>() {
 
+    private  val TAG = "SelectBrandRecyclerAdap"
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrandViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.make_card, parent, false)
         return BrandViewHolder(view)
@@ -26,41 +30,53 @@ class SelectBrandRecyclerAdapter(
 
     override fun onBindViewHolder(holder: BrandViewHolder, position: Int) {
         val brandItem = brands[position]
-        val brandName = brandItem.brand
-        holder.carBrand.text = brandName
+
+        holder.carBrand.text = brandItem.brand
+
         holder.checkbox.setOnCheckedChangeListener(null)
-        holder.checkbox.isChecked = viewModel.isBrandSelected(brandName)
-        holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
-            val modelNames = brandItem.models.map { it.name }
-            viewModel.toggleBrand(brandName, modelNames)
-            holder.nestedRecycler.visibility = if (isChecked) View.VISIBLE else View.GONE
+
+        // Set checkbox only if it's the first time this item is bound
+        if (!brandItem.isCheckedInitialized) {
+            holder.checkbox.isChecked = viewModel.isBrandSelected(brandItem.brand)
+            viewModel.toggleBrandSelection(brandItem, holder.checkbox.isChecked )
+            brandItem.isChecked = viewModel.isBrandSelected(brandItem.brand)
+            brandItem.isCheckedInitialized = true
+        } else {
+            holder.checkbox.isChecked = brandItem.isChecked
         }
 
-        // create models list including "All"
-        val modelsForAdapter = mutableListOf<CarModel>().apply {
-            if (brandItem.models.none { it.name == "All" }) add(CarModel(name = "All", variants = mutableListOf("All")))
-            addAll(brandItem.models)
-        }
+        // Expand/collapse layout
+        holder.expandableLayout.visibility = if (brandItem.isExpandable) View.VISIBLE else View.GONE
+        holder.arrow.rotation = if (brandItem.isExpandable) 180f else 0f
 
-        val modelAdapter = SelectedModelNestedRecyclerAdapter(brandName, modelsForAdapter, viewModel)
+        // Nested RecyclerView
         holder.nestedRecycler.apply {
-            layoutManager = LinearLayoutManager(holder.itemView.context)
-            adapter = modelAdapter
-            visibility = if (holder.checkbox.isChecked) View.VISIBLE else View.GONE
+            layoutManager = LinearLayoutManager(context)
+            adapter = SelectedModelNestedRecyclerAdapter(brandItem,viewModel,this@SelectBrandRecyclerAdapter, position)
         }
 
-        holder.arrow.setOnClickListener {
-            val visible = holder.nestedRecycler.visibility == View.VISIBLE
-            holder.nestedRecycler.visibility = if (visible) View.GONE else View.VISIBLE
-            holder.arrow.rotation = if (visible) 0f else 90f
+        // Expand/collapse click
+        val toggleExpand = {
+            brandItem.isExpandable = !brandItem.isExpandable
+            notifyItemChanged(position)
+        }
+        holder.arrow.setOnClickListener { toggleExpand() }
+        holder.contentLayout.setOnClickListener { toggleExpand() }
+
+        // Checkbox change listener
+        holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            brandItem.isChecked = isChecked
+            brandItem.isExpandable = isChecked
+            viewModel.toggleBrandSelection(brandItem, isChecked)
+
+
+            notifyItemChanged(position)
+            Log.d(TAG, "Checkbox changed: ${brandItem.brand}, isChecked=$isChecked")
         }
     }
 
     override fun getItemCount(): Int = brands.size
 
-    // ------------------------------------------------------------
-    // ViewHolder for Brand-Level Item
-    // ------------------------------------------------------------
     inner class BrandViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val contentLayout: RelativeLayout = itemView.findViewById(R.id.ListItem)
         val expandableLayout: RelativeLayout = itemView.findViewById(R.id.NestListView)
@@ -70,3 +86,4 @@ class SelectBrandRecyclerAdapter(
         val checkbox: CheckBox = itemView.findViewById(R.id.checkVarient)
     }
 }
+

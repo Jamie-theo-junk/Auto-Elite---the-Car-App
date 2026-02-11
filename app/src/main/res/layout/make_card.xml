@@ -24,9 +24,9 @@
             android:layout_centerVertical="true"/>
         <ImageView
             android:id="@+id/ChevronDown"
-            android:layout_width="17dp"
-            android:layout_height="12dp"
-            android:background="@drawable/chevron_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chevron_svg"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="30dp"
             android:layout_centerVertical="true"/>

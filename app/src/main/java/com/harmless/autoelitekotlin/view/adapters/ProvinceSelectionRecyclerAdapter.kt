@@ -28,31 +28,37 @@ class ProvinceSelectionRecyclerAdapter(private val items: List<String>):
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val model = items[position]
+        val province = items[position]
 
-        holder.brandName.text = model.toString()
+        holder.checkbox.setOnCheckedChangeListener(null)
+
+        holder.checkbox.isChecked = SelectedValues.selectedProvince.contains(province)
 
         holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            val list = SelectedValues.selectedProvince
 
-            if(isChecked){
-                SelectedValues.selectedProvince.add(items[position])
+            if (isChecked) {
+                if (!list.contains(province)) {
+                    list.add(province)
+                    SelectedValues.selectedProvince = list
+                    Log.d("TAG", "Added year: ${SelectedValues.selectedProvince}")
+                }
+            } else {
+                list.remove(province)
+                SelectedValues.selectedProvince = list
+                Log.d("TAG", "Removed year: ${SelectedValues.selectedProvince}")
             }
-            else{
-                SelectedValues.selectedProvince.remove(items[position])
-            }
-            for (items in SelectedValues.selectedPrice){
-                Log.d(TAG, "onBindViewHolder:  $items")
-            }
+        }
+
+        holder.provinceName.text = province
+
 
         }
 
 
 
-
-    }
-
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val brandName = itemView.findViewById<TextView>(R.id.nameTxt)
+        val provinceName = itemView.findViewById<TextView>(R.id.nameTxt)
         val checkbox = itemView.findViewById<CheckBox>(R.id.checkbox)
 
     }

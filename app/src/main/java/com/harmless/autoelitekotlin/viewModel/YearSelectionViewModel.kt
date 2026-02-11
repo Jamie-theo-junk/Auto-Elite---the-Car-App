@@ -10,6 +10,8 @@ import com.google.firebase.database.ValueEventListener
 class YearSelectionViewModel {
 
 
+
+
     interface YearsCallback {
         fun onYearsLoaded(years: List<Int>)
         fun onCancelled(error: DatabaseError)
@@ -34,6 +36,8 @@ class YearSelectionViewModel {
 
             yearsReference.addValueEventListener(yearsListener)
         }
+
+
     }
 
 

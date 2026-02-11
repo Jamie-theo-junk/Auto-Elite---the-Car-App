@@ -2,27 +2,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.activities.FilterActivities.PriceSelection">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/NavBarRelative"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/car_screen_color">
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
+        app:layout_constraintHorizontal_bias="0.133"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        android:id="@+id/NavBarRelative"
-        android:layout_width="match_parent"
-        android:background="@color/car_screen_color"
-        android:layout_height="50dp">
         <TextView
+            android:id="@+id/priceSelectionTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Years"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:layout_centerInParent="true"
             android:fontFamily="@font/sora_font_family"
-            android:layout_centerInParent="true"/>
+            android:text="Select A Price"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </RelativeLayout>
 
-
+</androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/PriceRecyclerView"
         android:layout_below="@id/NavBarRelative"
@@ -43,19 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         >
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/BackBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Back"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:layout_margin="20dp"
-            android:padding="10dp"
-            android:fontFamily="@font/sora_font_family"
-            android:background="@drawable/back_button"
-            />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/ApplyBtn"
             android:layout_width="0dp"

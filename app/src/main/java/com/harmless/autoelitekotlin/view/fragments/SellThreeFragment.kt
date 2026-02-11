@@ -29,6 +29,7 @@ import com.harmless.autoelitekotlin.viewModel.SellCarViewModel.SellSession.selec
 import com.harmless.autoelitekotlin.viewModel.SellCarViewModel.SellSession.selectedBrand
 import com.harmless.autoelitekotlin.viewModel.SellCarViewModel.SellSession.selectedColor
 import com.harmless.autoelitekotlin.viewModel.SellCarViewModel.SellSession.selectedDescription
+import com.harmless.autoelitekotlin.viewModel.SellCarViewModel.SellSession.selectedFuelType
 import com.harmless.autoelitekotlin.viewModel.SellCarViewModel.SellSession.selectedMileage
 import com.harmless.autoelitekotlin.viewModel.SellCarViewModel.SellSession.selectedModel
 import com.harmless.autoelitekotlin.viewModel.SellCarViewModel.SellSession.selectedNewOrUsed
@@ -154,7 +155,7 @@ class SellThreeFragment : Fragment() {
     private fun uploadUserAndCar() {
         val carsRef = database.getReference("cars")
 
-        // ✅ Get current user data from Realtime Database
+
         userRef.get().addOnSuccessListener { snapshot ->
             if (!snapshot.exists()) {
                 Toast.makeText(requireContext(), "User profile not found!", Toast.LENGTH_SHORT).show()
@@ -173,15 +174,14 @@ class SellThreeFragment : Fragment() {
                 }.addOnSuccessListener { downloadUri ->
                     downloadUrls.add(downloadUri.toString())
 
-                    // ✅ When all images uploaded
                     if (downloadUrls.size == selectedImages.size) {
                         val carId = carsRef.push().key ?: return@addOnSuccessListener
 
                         val car = Car(
                             BodyType = selectedBodyType ?: "",
-                            IsNew = selectedNewOrUsed ?: false,
+                            IsNew = selectedNewOrUsed ?: "",
                             brand = selectedBrand?.brand ?: "",
-                            color = selectedColor ?: "",
+                            color = selectedColor?: "",
                             images = downloadUrls,
                             location = selectedProvince ?: "",
                             mileage = selectedMileage ?: 0,
@@ -194,6 +194,7 @@ class SellThreeFragment : Fragment() {
                             wheelDrive = selectedWheelDrive ?: "",
                             variant = selectedVariant ?: "",
                             description = selectedDescription ?: "",
+                            fuelType = selectedFuelType?: "",
                             user = currentUser
                         )
 

@@ -62,9 +62,8 @@ class SellFragment : Fragment() {
     private fun setUpListeners() {
         sellButton.setOnClickListener {
             val intent = Intent(requireContext(), SellCarActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-            requireActivity().finish()
+            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
     }
 

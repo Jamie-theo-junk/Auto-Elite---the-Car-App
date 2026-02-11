@@ -29,31 +29,35 @@ class ColourSelectionRecyclerAdapter(private val items: List<String>):
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val model = items[position]
+        val color = items[position]
 
-        holder.brandName.text = model.toString()
+        holder.checkbox.setOnCheckedChangeListener(null)
+
+        holder.checkbox.isChecked = SelectedValues.selectedColor.contains(color)
 
         holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            val list = SelectedValues.selectedColor
 
-            if(isChecked){
-                SelectedValues.selectedColor.add(items[position])
+            if (isChecked) {
+                if (!list.contains(color)) {
+                    list.add(color)
+                    SelectedValues.selectedColor = list
+                    Log.d("TAG", "Added year: ${SelectedValues.selectedColor}")
+                }
+            } else {
+                list.remove(color)
+                SelectedValues.selectedColor = list
+                Log.d("TAG", "Removed year: ${SelectedValues.selectedProvince}")
             }
-            else{
-                SelectedValues.selectedColor.remove(items[position])
-            }
-            for (items in SelectedValues.selectedPrice){
-                Log.d(TAG, "onBindViewHolder:  $items")
-            }
-
         }
 
-
-
+        holder.colorName.text = color
 
     }
 
+
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val brandName = itemView.findViewById<TextView>(R.id.nameTxt)
+        val colorName = itemView.findViewById<TextView>(R.id.nameTxt)
         val checkbox = itemView.findViewById<CheckBox>(R.id.checkbox)
 
     }

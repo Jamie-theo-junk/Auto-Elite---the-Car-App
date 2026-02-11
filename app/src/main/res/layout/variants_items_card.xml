@@ -2,28 +2,29 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/VariantLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <CheckBox
-        android:id="@+id/checkbox"
+        android:id="@+id/variantCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="15dp"/>
+        android:layout_marginStart="50dp"/>
 
     <TextView
-        android:id="@+id/nameTxt"
+        android:id="@+id/variantTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:fontFamily="@font/sora_font_family"
         android:textColor="@color/grey"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/checkbox"
-        app:layout_constraintStart_toEndOf="@id/checkbox"
-        app:layout_constraintTop_toTopOf="@id/checkbox" />
+        app:layout_constraintBottom_toBottomOf="@+id/variantCheckbox"
+        app:layout_constraintStart_toEndOf="@id/variantCheckbox"
+        app:layout_constraintTop_toTopOf="@id/variantCheckbox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
