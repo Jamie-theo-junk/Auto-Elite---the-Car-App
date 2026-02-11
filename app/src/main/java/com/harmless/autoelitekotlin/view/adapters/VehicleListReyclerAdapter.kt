@@ -43,11 +43,31 @@ RecyclerView.Adapter<VehicleListReyclerAdapter.ItemViewHolder>(){
 
         holder.brandName.setText(cars[position].brand)
         holder.modelName.setText(cars[position].model)
+        holder.variantName.text = car.variant
         holder.year.setText(cars[position].year!!.toString())
         holder.location.setText(cars[position].location)
-        holder.type.setText(cars[position].type)
-        holder.mileage.setText(cars[position].mileage!!.toString())
-        holder.price.setText(cars[position].price!!.toString())
+        val mileage = cars[position].mileage ?: 0
+        val price = cars[position].price ?: 0.0
+
+        val mileageFormatted = String.format("%,d km", mileage)
+
+
+        val priceFormatted = "R " + String.format("%,.0f", price)
+        holder.mileage.text = mileageFormatted
+        holder.price.text = priceFormatted
+
+        val accountUrl = car.user.profileImageUrl
+        if (!accountUrl.isNullOrEmpty()) {
+            Glide.with(holder.itemView.context)
+                .load(accountUrl)
+                .centerCrop()
+                .placeholder(R.mipmap.ic_launcher)
+                .into(holder.accountImage)
+        } else {
+            holder.image.setImageResource(R.mipmap.ic_launcher)
+        }
+        holder.accountTxt.text = car.user.name
+
         holder.size.setText(cars[position].images!!.size.toString())
 
         val imageUrl = car.images?.firstOrNull()
@@ -71,16 +91,19 @@ RecyclerView.Adapter<VehicleListReyclerAdapter.ItemViewHolder>(){
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val cardButton = itemView.findViewById<RelativeLayout>(R.id.VehicleCardView)
+        val cardButton = itemView.findViewById<CardView>(R.id.VehicleCardView)
        val brandName = itemView.findViewById<TextView>(R.id.VehicleBrandTxt)
         val modelName = itemView.findViewById<TextView>(R.id.VehicleModelTxt)
+        val variantName = itemView.findViewById<TextView>(R.id.VehicleVariantTxt)
         val year = itemView.findViewById<TextView>(R.id.VehicleYearTxt)
         val location = itemView.findViewById<TextView>(R.id.LocationTxt)
-        val type = itemView.findViewById<TextView>(R.id.TypeTxt)
+
         val mileage = itemView.findViewById<TextView>(R.id.VehicleMileageTxt)
         val price = itemView.findViewById<TextView>(R.id.priceTxt)
         val size = itemView.findViewById<TextView>(R.id.size)
         val image = itemView.findViewById<ImageView>(R.id.VehicleImage)
+        val accountImage = itemView.findViewById<ImageView>(R.id.accountImage)
+        val accountTxt = itemView.findViewById<TextView>(R.id.accountTxt)
     }
     companion object{
         private const val TAG = "VehicleListReyclerAdapt"

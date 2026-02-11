@@ -138,6 +138,7 @@ object SelectedValues {
           get() = prefs.getString("selectedDriveTrain", null)
           set(value) = save("selectedDriveTrain", value)
 
+
      fun clear() {
           prefs.edit().clear().apply()
      }

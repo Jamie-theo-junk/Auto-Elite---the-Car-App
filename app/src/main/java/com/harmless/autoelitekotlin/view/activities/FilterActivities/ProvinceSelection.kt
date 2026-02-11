@@ -50,5 +50,6 @@ class ProvinceSelection : AppCompatActivity() {
         applyBtn.setOnClickListener {
             finish()
         }
+
 }
 }

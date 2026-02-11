@@ -5,7 +5,7 @@ import android.os.Parcelable
 
 data class Car(
     var BodyType: String,
-    var IsNew: Boolean,
+    var IsNew: String,
     var brand: String,
     var color: String,
     var images: List<String>,
@@ -20,12 +20,13 @@ data class Car(
     var wheelDrive: String,
     var variant: String,
     var description: String,
+    var fuelType:String,
     var user: User
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
-        parcel.readByte() != 0.toByte(),
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.createStringArrayList() ?: emptyList(),
@@ -40,12 +41,13 @@ data class Car(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readParcelable(User::class.java.classLoader) ?: User()
     )
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(BodyType)
-        dest.writeByte(if (IsNew) 1 else 0)
+        dest.writeString(IsNew)
         dest.writeString(brand)
         dest.writeString(color)
         dest.writeStringList(images)
@@ -60,6 +62,7 @@ data class Car(
         dest.writeString(wheelDrive)
         dest.writeString(variant)
         dest.writeString(description)
+        dest.writeString(fuelType)
         dest.writeParcelable(user, flags)
     }
 
@@ -67,7 +70,7 @@ data class Car(
 
     constructor() : this(
         "",
-        false,
+        "",
         "",
         "",
         emptyList(),
@@ -79,6 +82,7 @@ data class Car(
         "",
         "",
         0,
+        "",
         "",
         "",
         "",

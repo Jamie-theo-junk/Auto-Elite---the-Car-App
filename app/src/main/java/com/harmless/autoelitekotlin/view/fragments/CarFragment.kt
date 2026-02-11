@@ -25,7 +25,7 @@ import com.harmless.autoelitekotlin.view.activities.VehicleListActivity
 import com.harmless.autoelitekotlin.view.activities.FilterActivities.YearSelection
 import com.harmless.autoelitekotlin.view.adapters.SpinnerAdapter
 import com.harmless.autoelitekotlin.viewModel.CarViewModel
-class CarFragment : Fragment(), CarViewModel.CarsCallback {
+class CarFragment : Fragment(){
 
     companion object {
         private const val TAG = "CAR_FRAGMENT"
@@ -148,7 +148,9 @@ class CarFragment : Fragment(), CarViewModel.CarsCallback {
                 SelectedValues.selectedMaxMileage,
                 parsePriceStringToInt(SelectedValues.selectedMinPrice),
                 parsePriceStringToInt(SelectedValues.selectedMaxPrice),
-                SelectedValues.selectedTransmission
+                SelectedValues.selectedTransmission,
+                        SelectedValues.isNewOrUsed,
+                SelectedValues.selectedFuelType
             ) { cars ->
 
                 if (cars.isEmpty()) {
@@ -180,15 +182,6 @@ class CarFragment : Fragment(), CarViewModel.CarsCallback {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-    }
-
-
-    override fun onDataLoaded(cars: List<Car>) {
-
-    }
-
-    override fun onCancelled(error: DatabaseError) {
-        Toast.makeText(requireContext(), "Error loading cars: ${error.message}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onResume() {

@@ -3,6 +3,7 @@ package com.harmless.autoelitekotlin.view.activities
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -10,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
@@ -40,10 +42,40 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
         drawerLayout = findViewById(R.id.my_drawer_layout)
         navigationView = findViewById(R.id.navigation_menu)
         navigationButton = findViewById(R.id.NavButton)
-
+        setupDrawer()
         setFragment()
         loadUserProfile()
 
+    }
+    private fun setupDrawer() {
+        navigationButton.setOnClickListener {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+
+        // Handle menu item clicks
+        navigationView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_account -> {
+                    Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+                }
+
+                R.id.nav_settings -> {
+                    Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
+                }
+
+                R.id.nav_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
     }
 
     private fun loadUserProfile() {

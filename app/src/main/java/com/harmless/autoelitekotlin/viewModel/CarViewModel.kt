@@ -24,7 +24,7 @@ class CarViewModel {
     fun setCars(callback: CarsCallback) {
         val carsReference = FirebaseDatabase.getInstance().getReference("cars")
 
-        carsReference.addValueEventListener(object : ValueEventListener {
+        carsReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 carList.clear()
                 for (carSnapshot in snapshot.children) {
@@ -43,20 +43,6 @@ class CarViewModel {
             }
         })
     }
-//        fun filterCars(allCars: List<Car>): List<Car> {
-//        // If nothing selected, return all cars
-//        if (SelectedValues.carBrandsSelected.isEmpty() && SelectedValues.carModelsSelected.isEmpty() && SelectedValues.carVariantsSelected.isEmpty()) {
-//            return allCars
-//        }
-//
-//        return allCars.filter { car ->
-//            val brandMatch = SelectedValues.carBrandsSelected.contains(car.brand)
-//            val modelMatch = SelectedValues.carModelsSelected.contains(Pair(car.brand, car.model))
-//            val variantMatch = SelectedValues.carVariantsSelected.contains(Triple(car.brand, car.model, car.variant))
-//
-//            brandMatch || modelMatch || variantMatch
-//        }
-//    }
     fun minMileage(selectedMileage: String): Int {
         val constants = Constants()
         return when (selectedMileage) {
@@ -92,6 +78,8 @@ class CarViewModel {
         minPriceSelected: Int? = null,
         maxPriceSelected: Int? = null,
         transmissionSelected: String?,
+        isNewOrUsed:String?,
+        fuelSelected:String?,
         callback: (List<Car>) -> Unit
     ) {
         setCars(object : CarsCallback {
@@ -160,6 +148,17 @@ class CarViewModel {
                                 else yearSelected.contains(car.year)
                     Log.d(TAG, "onDataLoaded: Year: $yearSelected")
 
+                    //----New-----
+                    val newOrUsedMatches =
+                        if(isNewOrUsed.isNullOrEmpty()) true
+                                else if(isNewOrUsed =="New & Used") true
+                                else car.IsNew == isNewOrUsed
+                    //----Fuel-----
+                    val fuelTypeMatches =
+                        if(fuelSelected.isNullOrEmpty()) true
+                        else if(fuelSelected =="Fuel Type") true
+                        else car.fuelType == fuelSelected
+
 
                     categoryMatches &&
                             colorMatches &&
@@ -168,7 +167,10 @@ class CarViewModel {
                             mileageMatches &&
                             priceMatches &&
                             transmissionMatches &&
-                            yearMatches
+                            yearMatches &&
+                            newOrUsedMatches &&
+                            fuelTypeMatches
+
                 }.sortedByDescending { it.year }
 
                 callback(filtered)
@@ -178,14 +180,5 @@ class CarViewModel {
                 callback(emptyList())
             }
         })
-    }
-
-
-
-
-
-
-    private fun sortYear() {
-        SelectedValues.selectedYear.sort()
     }
 }

@@ -87,7 +87,6 @@ private var viewModel = CarViewModel()
         val newUsed = SelectedValues.isNewOrUsed
         setupSpinner(newOrUsedSpinner, constant.newOrUsed, newUsed) { selected ->
             SelectedValues.isNewOrUsed = selected
-
         }
 
         val type = SelectedValues.selectedDriveTrain
@@ -122,6 +121,7 @@ private var viewModel = CarViewModel()
                 Toast.makeText(this, "Min price adjusted to not exceed max price.", Toast.LENGTH_SHORT).show()
             }
         }
+
 
 
 

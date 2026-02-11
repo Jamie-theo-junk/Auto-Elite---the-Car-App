@@ -93,12 +93,11 @@ class CarListingActivity : AppCompatActivity() {
         val formattedPrice = format.format(car.price)
         priceTxt.text = formattedPrice
 
-        if(car.IsNew){
-            newOrUsedTxt.text = "New"
-        }
-        else{
-            newOrUsedTxt.text = "Used"
-        }
+
+            newOrUsedTxt.text = car.IsNew
+
+
+
         yearTxt.text = car.year.toString()
 
         descriptionTxt.text = car.description

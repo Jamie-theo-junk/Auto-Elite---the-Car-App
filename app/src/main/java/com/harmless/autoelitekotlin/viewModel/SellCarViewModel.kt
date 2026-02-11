@@ -18,7 +18,7 @@ class SellCarViewModel : ViewModel() {
     private val _sellCarObject = MutableLiveData(
         Car(
             BodyType = "",
-            IsNew = false,
+            IsNew = "",
             brand = "",
             color = "",
             images = emptyList(),
@@ -33,6 +33,7 @@ class SellCarViewModel : ViewModel() {
             wheelDrive = "",
             variant = "",
             description = "",
+            fuelType = "",
             user = User(
                 uid = "",
                 name = "",
@@ -70,54 +71,14 @@ class SellCarViewModel : ViewModel() {
     }
 
     // ----------------- Update Pages -----------------
-    fun updateFirstPage(
-        model: String,
-        brand: String,
-        type: String,
-        color: String,
-        wheelDrive: String,
-        variant: String
-    ) {
-        val current = _sellCarObject.value ?: return
-        _sellCarObject.value = current.copy(
-            model = model,
-            brand = brand,
-            type = type,
-            color = color,
-            wheelDrive = wheelDrive,
-            variant = variant
-        )
-    }
 
-    fun updateSecondPage(
-        year: Int,
-        price: Double,
-        mileage: Int,
-        isNew: Boolean,
-        province: String,
-        description: String
-    ) {
-        val current = _sellCarObject.value ?: return
-        _sellCarObject.value = current.copy(
-            year = year,
-            price = price,
-            mileage = mileage,
-            IsNew = isNew,
-            provinces = province,
-            description = description
-        )
-    }
-
-    fun updateThirdPage(images: List<String>) {
-        val current = _sellCarObject.value ?: return
-        _sellCarObject.value = current.copy(images = images)
-    }
 
     // ----------------- Selected State -----------------
     object SellSession {
         var selectedBrand: CarBrand? = null
         var selectedModel: CarModel? = null
         var selectedVariant: String? = null
+        var selectedFuelType: String? = null
 
         var selectedYear: Int? = null
 
@@ -130,10 +91,11 @@ class SellCarViewModel : ViewModel() {
         var selectedWheelDrive: String? = null
 
         var selectedPrice:Int? = null
-        var selectedNewOrUsed: Boolean? = null
+        var selectedNewOrUsed: String? = null
         var selectedMileage:Int? = null
         var selectedDescription:String? = null
         var selectedProvince:String? = null
+
 
 
 

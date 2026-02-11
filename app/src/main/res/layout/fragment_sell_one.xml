@@ -197,7 +197,8 @@
             android:layout_height="50dp"
             app:layout_constraintTop_toBottomOf="@id/sell_car_color"
             android:layout_marginHorizontal="20dp"
-            android:background="@drawable/sell_car_background"
+            android:paddingStart="30dp"
+            android:background="@drawable/rectangle_background"
             />
 
         <TextView
