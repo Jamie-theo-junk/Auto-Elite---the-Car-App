@@ -53,7 +53,6 @@ private fun setupBrandRecycler(bodyTypes: List<String>) {
     bodyTypeRecycler.layoutManager = GridLayoutManager(this, 2)
     bodyTypeRecycler.adapter = BodyTypeSellAdapter(bodyTypes) { bodyTypes ->
         SellCarViewModel.SellSession.selectedBodyType = bodyTypes
-
     }
 }
 
@@ -64,7 +63,6 @@ private fun setupContinueButton() {
         Log.d(TAG, "setupContinueButton: $bodyTypes")
 
         if (bodyTypes != null) {
-//                Toast.makeText(this, "Selected: ${brand.brand}", Toast.LENGTH_SHORT).show()
 
             val toSellFragment = Intent(this, SellCarActivity::class.java)
             startActivity(toSellFragment)
@@ -76,6 +74,7 @@ private fun setupContinueButton() {
 }
 
 companion object {
-    private const val TAG = "SellSelectBodyTypeActiv"
+    private const val TAG = "SellSelectBodyTypeActivity"
 }
+
 }
