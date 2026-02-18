@@ -3,9 +3,17 @@
     android:height="45dp"
     android:viewportWidth="303"
     android:viewportHeight="45">
+
+  <!-- Background -->
   <path
       android:pathData="M15,1L288,1A14,14 0,0 1,302 15L302,30A14,14 0,0 1,288 44L15,44A14,14 0,0 1,1 30L1,15A14,14 0,0 1,15 1z"
       android:strokeWidth="2"
       android:fillColor="#EC7171"
       android:strokeColor="#EC7171"/>
+
+  <!-- Dropdown Arrow -->
+  <path
+      android:pathData="M270,18 L283,18 L276.5,26 Z"
+      android:fillColor="#FFFFFF"/>
+
 </vector>

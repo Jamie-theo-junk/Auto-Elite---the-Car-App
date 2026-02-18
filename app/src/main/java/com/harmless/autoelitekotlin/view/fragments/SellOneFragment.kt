@@ -1,6 +1,6 @@
 package com.harmless.autoelitekotlin.view.fragments
 
-import android.R
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.harmless.autoelitekotlin.R
 import com.harmless.autoelitekotlin.databinding.FragmentSellOneBinding
 import com.harmless.autoelitekotlin.model.utils.Constants
 import com.harmless.autoelitekotlin.view.activities.MainActivity
@@ -24,7 +25,6 @@ import com.harmless.autoelitekotlin.view.activities.SellActivities.SellSelectBra
 import com.harmless.autoelitekotlin.view.activities.SellActivities.SellSelectModelActivity
 import com.harmless.autoelitekotlin.view.activities.SellActivities.SellSelectVariantActivity
 import com.harmless.autoelitekotlin.view.activities.SellActivities.SellSelectYear
-import com.harmless.autoelitekotlin.view.adapters.SpinnerAdapter
 import com.harmless.autoelitekotlin.viewModel.SellCarViewModel
 
 
@@ -125,7 +125,6 @@ class SellOneFragment : Fragment() {
         }
 
         bodyButton.setOnClickListener {
-
             startActivity(Intent(requireContext(), SellSelectBodyTypeActivity::class.java))
         }
 
@@ -138,11 +137,11 @@ class SellOneFragment : Fragment() {
 
         val colorAdapter = ArrayAdapter(
             requireContext(),
-            R.layout.simple_spinner_item,
+            R.layout.spinner_sell_car,
             carColors
         )
-        colorAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
 
+        colorAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
         colorSpinner.adapter = colorAdapter
 
         colorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -165,11 +164,11 @@ class SellOneFragment : Fragment() {
 
         val transmissionAdapter = ArrayAdapter(
             requireContext(),
-            R.layout.simple_spinner_item,
+            R.layout.spinner_sell_car,
             transmissionColors
         )
-        transmissionAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
 
+        transmissionAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
         transmissionSpinner.adapter = transmissionAdapter
 
         transmissionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -192,11 +191,10 @@ class SellOneFragment : Fragment() {
 
         val wheelDriveAdapter = ArrayAdapter(
             requireContext(),
-            R.layout.simple_spinner_item,
+            R.layout.spinner_sell_car,
             carWheelDrive
         )
-        wheelDriveAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-
+        wheelDriveAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
         WheelDriveSpinner.adapter = wheelDriveAdapter
 
         WheelDriveSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -217,20 +215,8 @@ class SellOneFragment : Fragment() {
 
 
     }
-    private fun setupSpinner(spinner: Spinner, items: List<String>, selectedItem: String?, onSelect: (String) -> Unit) {
-        val adapter = SpinnerAdapter(requireContext(), items)
-        spinner.adapter = adapter
-        selectedItem?.let {
-            val idx = items.indexOf(it)
-            if (idx >= 0) spinner.setSelection(idx)
-        }
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                onSelect(items[position])
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
+
+
 
 
     private fun navigationButtons(){
