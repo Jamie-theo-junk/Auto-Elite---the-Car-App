@@ -13,6 +13,9 @@
         android:theme="@style/Theme.AutoEliteKotlin"
         tools:targetApi="31">
         <activity
+            android:name=".view.activities.SellActivities.SellCarPreviewActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activities.UserDetailsActivity"
             android:exported="false" />
         <activity

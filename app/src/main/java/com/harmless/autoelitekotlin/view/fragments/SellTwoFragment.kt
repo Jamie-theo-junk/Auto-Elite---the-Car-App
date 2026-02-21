@@ -93,7 +93,7 @@ class SellTwoFragment : Fragment() {
 
         val newOrUsedAdapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            R.layout.spinner_sell_car,
             newOrUsedArray
         )
         newOrUsedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -119,7 +119,7 @@ class SellTwoFragment : Fragment() {
 
         val provinceAdapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            R.layout.spinner_sell_car,
             provinceArray
         )
         provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -146,7 +146,7 @@ class SellTwoFragment : Fragment() {
 
         val fuelTypeAdapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            R.layout.spinner_sell_car,
             fuelTypeArray
         )
         fuelTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
