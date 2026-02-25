@@ -165,6 +165,6 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
-        TODO("Not yet implemented")
+
     }
 }

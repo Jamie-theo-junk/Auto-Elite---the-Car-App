@@ -9,7 +9,7 @@ import com.harmless.autoelitekotlin.view.fragments.SellFragment
 
 class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
     override fun getCount(): Int {
-        return 3;
+        return 2;
     }
 
     override fun getItem(position: Int): Fragment {
@@ -19,9 +19,6 @@ class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
             }
             1->{
                 return SellFragment()
-            }
-            2->{
-                return FinanceFragment()
             }
             else ->{
                 return CarFragment()
@@ -37,9 +34,7 @@ class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
             1 -> {
                 return "Sell"
             }
-            2 -> {
-                return "Finance"
-            }
+
         }
         return super.getPageTitle(position)
     }

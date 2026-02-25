@@ -22,6 +22,7 @@ import com.harmless.autoelitekotlin.view.adapters.ThumbnailAdapter
 import com.harmless.autoelitekotlin.view.fragments.FullscreenImageDialog
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.pow
 
 class CarListingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCarListingBinding
@@ -37,8 +38,9 @@ class CarListingActivity : AppCompatActivity() {
     private lateinit var priceTxt:TextView
 
     private lateinit var images : ViewPager2
-
+    private lateinit var financeTxt:TextView
     private lateinit var thumbnailRecycler: RecyclerView
+
 
     private lateinit var callBtn : Button
     private lateinit var messageBtn : Button
@@ -75,6 +77,7 @@ class CarListingActivity : AppCompatActivity() {
         descriptionTxt = binding.listCarDescriptionTxt
         descriptionTxtReadMore = binding.listCarReadMoreTxt
         priceTxt = binding.carListingPrice
+        financeTxt = binding.carListingPriceMonthly
 
         arrowBackBtn = binding.arrowBack
 
@@ -91,10 +94,26 @@ class CarListingActivity : AppCompatActivity() {
         val format = NumberFormat.getCurrencyInstance(Locale("en", "ZA"))
         format.maximumFractionDigits = 0
         val formattedPrice = format.format(car.price)
+
+        val years = 5
+        val annualInterestRate = 7.0 // change if needed, 0.0 for no interest
+        val principal = car.price
+
+        val monthlyRate = annualInterestRate / 12 / 100
+        val months = years * 12
+
+        val monthlyPayment = if (monthlyRate == 0.0) {
+            principal / months
+        } else {
+            val factor = (1 + monthlyRate).pow(months)
+            principal * monthlyRate * factor / (factor - 1)
+        }
+
+        val formattedFinance = format.format(monthlyPayment)
+        financeTxt.text = formattedFinance
         priceTxt.text = formattedPrice
 
-
-            newOrUsedTxt.text = car.IsNew
+        newOrUsedTxt.text = car.IsNew
 
 
 

@@ -48,7 +48,7 @@ class SellCarViewModel : ViewModel() {
     // ----------------- Firebase Brand Loading -----------------
     fun getCarBrand(callback: CarBrandCallback) {
         val carsRef = FirebaseDatabase.getInstance().getReference("carRecycler")
-        carsRef.addValueEventListener(object : ValueEventListener {
+        carsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 carBrands.clear()
                 for (carSnapshot in snapshot.children) {

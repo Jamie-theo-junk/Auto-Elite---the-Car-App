@@ -60,9 +60,10 @@
 
     <TextView
         android:id="@+id/car_listing_variant"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
         android:textIsSelectable="true"
         android:longClickable="true"
         android:fontFamily="@font/sora_semi_bold"
@@ -81,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:fontFamily="@font/sora_semi_bold"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:textSize="15sp"
         android:textColor="@color/car_screen_color"/>
     <TextView
