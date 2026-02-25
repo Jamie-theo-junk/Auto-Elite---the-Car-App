@@ -1,8 +1,8 @@
-#AutoElite 🚗
+# AutoElite 🚗
 
 AutoElite is an Android application built using Kotlin that allows users to browse, explore, and interact with a curated selection of vehicles. The application focuses on providing a smooth user experience with a clean interface and structured vehicle selection flow.
 
-##📱 Features
+## Features
 
 Browse available vehicles
 
@@ -16,7 +16,7 @@ Optimized layouts and organized components
 
 Scalable architecture for future enhancements
 
-##🛠 Built With
+##  Built With
 
 Kotlin
 
@@ -26,7 +26,7 @@ Gradle
 
 Android Studio
 
-##📂 Project Structure
+##  Project Structure
 AutoElite/
 │
 ├── app/
@@ -40,7 +40,7 @@ AutoElite/
 ├── settings.gradle
 └── gradlew
 
-##🚀 Getting Started
+##  Getting Started
 Prerequisites
 
 Android Studio (latest stable version recommended)
@@ -61,7 +61,7 @@ Allow Gradle to sync.
 
 Run the application on an emulator or physical device.
 
-##📌 Minimum Requirements
+##  Minimum Requirements
 
 Minimum SDK: 29
 
@@ -79,6 +79,6 @@ Favorites system
 
 Performance optimizations
 
-##👤 Author
+##  Author
 
-###Jamie Theo Junk
+### Jamie Theo Junk
