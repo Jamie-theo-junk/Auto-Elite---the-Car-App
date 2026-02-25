@@ -53,12 +53,8 @@ AutoElite is an Android application built using Kotlin that allows users to brow
 ![Sell Car](docs/sell_car.jpeg)
 
 ## 🧩 Future Improvements
-
-- Backend integration
-- User authentication
-- Vehicle filtering and search
-- Favorites system
 - Performance optimizations
+- -ui improvements
 
 ## 👤 Author
 
